@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragon Ball Z </title>
+
+<!-- tipografia  -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===========================
+     TOKENS DE DISEÑO
+     Paleta inspirada en el "ki" (energía) de la serie: con ayuda de la IA 
+     fondo oscuro tipo espacio, acentos naranja/azul de energía
+  =========================== */
+  :root {
+    --bg: #0d0d12;
+    --surface: #16161f;
+    --surface-hover: #1d1d29;
+    --border: #2a2a38;
+    --ki-orange: #ff7a1a;
+    --ki-blue: #3fa9f5;
+    --text: #f4f1ea;
+    --text-muted: #8b8b96;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rubik', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ===========================
+     HEADER
+     
+  =========================== */
+  header {
+    padding: 64px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /*  decorativo TITULO  */
+  header::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(255,122,26,0.18) 0%, rgba(255,122,26,0) 70%);
+    pointer-events: none;
+  }
+
+  header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    letter-spacing: 1px;
+    position: relative;
+  }
+
+  header h1 span {
+    color: var(--ki-orange);
+  }
+
+  header p {
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-size: 1.05rem;
+    position: relative;
+  }
+
+  /* ===========================
+     FILTROS
+  =========================== */
+  .filtros {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 32px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filtros input,
+  .filtros select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  .filtros input { flex: 1; min-width: 220px; }
+
+  .filtros input:focus,
+  .filtros select:focus {
+    outline: 2px solid var(--ki-orange);
+    outline-offset: 1px;
+  }
+
+  /* ===========================
+     TARJETAS
+  =========================== */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+
+  #estado {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 0;
+  }
+
+  .grid-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  /* Tarjeta individual:
+     contenedor de cada personaje */
+  .tarjeta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--ki-orange);
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .tarjeta:hover {
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+  }
+
+  .tarjeta .imagen-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #0a0a0e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tarjeta img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+  }
+
+  .tarjeta .info {
+    padding: 14px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .tarjeta h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
+  }
+
+  .tarjeta .dato {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .tarjeta .dato strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .ki-bar-wrap {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  .ki-bar-track {
+    width: 100%;
+    height: 6px;
+    background: #0a0a0e;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .ki-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ki-blue), var(--ki-orange));
+  }
+
+  /* ===========================
+     PAGINADO
+  =========================== */
+  .paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .paginacion button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  .paginacion button:hover:not(:disabled) {
+    border-color: var(--ki-orange);
+    color: var(--ki-orange);
+  }
+
+  .paginacion button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .paginacion span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* Las tarjetas ahora son clickeables para abrir el modal */
+  .tarjeta { cursor: pointer; }
+
+  /* ===========================
+     MODAL DE DETALLE
+  =========================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 8, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 100;
+  }
+
+  .modal-overlay.activo {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Scroll */
+  .modal::-webkit-scrollbar { width: 8px; }
+  .modal::-webkit-scrollbar-track { background: transparent; }
+  .modal::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  .modal::-webkit-scrollbar-thumb:hover { background: var(--ki-orange); }
+
+  .modal-cerrar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    background: rgba(0,0,0,0.4);
+    border: none;
+    border-radius: 50%;
+    color: var(--text);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-cerrar:hover { background: var(--ki-orange); }
+
+  /* Franja superior  + silueta del personaje contenida */
+  .modal-hero {
+    position: relative;
+    height: 180px;
+    background: linear-gradient(180deg, #1b1b28 0%, var(--surface) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .modal-hero img {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: bottom;
+  }
+
+  .modal-identidad {
+    padding: 18px 28px 0;
+    text-align: center;
+  }
+
+  .modal-identidad h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.7rem;
+  }
+
+  .modal-badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .badge.acento {
+    border-color: var(--ki-orange);
+    color: var(--ki-orange);
+  }
+
+  .modal-cuerpo {
+    padding: 20px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .modal-datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px;
+  }
+
+  .modal-datos .dato-item {
+    text-align: center;
+    padding: 10px 8px;
+    background: #0a0a0e;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .modal-datos .dato-item .valor {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    display: block;
+  }
+
+  .modal-datos .dato-item .etiqueta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .modal-descripcion {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .modal-seccion-titulo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+    color: var(--ki-blue);
+    margin-bottom: 10px;
+  }
+
+  .modal-transformaciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 10px;
+  }
+
+  .transformacion { text-align: center; }
+
+  .transformacion .miniatura {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #0a0a0e;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .transformacion img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+
+  .transformacion span {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.2;
+  }
+
+  .modal-cargando {
+    padding: 60px 28px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>DRAGON BALL <span>Z</span></h1>
+    <p>Explorá a los personajes de tu serie favorita</p>
+  </header>
+
+  <!-- Filtrospor nombre y raza -->
+  <div class="filtros">
+    <input type="text" id="buscarNombre" placeholder="Buscar por nombre...">
+    <select id="filtrarRaza">
+      <option value="">Todas las razas</option>
+    </select>
+  </div>
+
+  <main>
+    <div id="estado"></div>
+    <div class="grid-tarjetas" id="grid"></div>
+
+    <div class="paginacion" id="paginacion" style="display:none;">
+      <button id="btnAnterior">← Anterior</button>
+      <span id="infoPagina"></span>
+      <button id="btnSiguiente">Siguiente →</button>
+    </div>
+  </main>
+
+  <!-- Modal de detalle: se llena  al hacer clic en una tarjeta -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-cerrar" id="modalCerrar" aria-label="Cerrar">&times;</button>
+      <div id="modalContenido">
+        <div class="modal-cargando">Cargando detalle...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===========================
+    // CONFIGURACIÓN Y ESTADO GLOBAL
+    // ===========================
+    const API_BASE = 'https://dragonball-api.com/api/characters';
+    const LIMITE_POR_PAGINA = 12;
+
+    let personajesActuales = []; // personajes(ya filtrados por raza en la API si aplica)
+    let paginaActual = 1;
+    let totalPaginas = 1;
+
+    // Referencias a elementos del DOM
+    const grid = document.getElementById('grid');
+    const estadoEl = document.getElementById('estado');
+    const paginacionEl = document.getElementById('paginacion');
+    const infoPaginaEl = document.getElementById('infoPagina');
+    const btnAnterior = document.getElementById('btnAnterior');
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    const inputBuscar = document.getElementById('buscarNombre');
+    const selectRaza = document.getElementById('filtrarRaza');
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalContenido = document.getElementById('modalContenido');
+    const modalCerrar = document.getElementById('modalCerrar');
+
+    // Cache 
+    const cacheDetalle = new Map();
+
+    /**
+     * Construye la URL de consulta a la API según pag filtro de raza
+     */
+    function construirUrl(pagina, raza) {
+      const params = new URLSearchParams({
+        page: pagina,
+        limit: LIMITE_POR_PAGINA
+      });
+      if (raza) params.set('race', raza);
+      return `${API_BASE}?${params.toString()}`;
+    }
+
+    /**
+     * Trae los personajes desde la API pública y actualiza la vista.
+     * 
+     */
+    async function cargarPersonajes(pagina = 1) {
+      const raza = selectRaza.value;
+      mostrarCargando();
+
+      try {
+        const res = await fetch(construirUrl(pagina, raza));
+
+        if (!res.ok) {
+          throw new Error(`La API respondió con estado ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        // La API tiene dos formatos de respuesta:
+        // - Sin filtros: { items: [...], meta: { totalPages, currentPage, ... } } (paginado)
+        // - Con filtro de raza: un array plano [...] (sin paginación)
+        if (Array.isArray(data)) {
+          personajesActuales = data;
+          paginaActual = 1;
+          totalPaginas = 1;
+        } else {
+          personajesActuales = data.items || [];
+          paginaActual = data.meta?.currentPage || pagina;
+          totalPaginas = data.meta?.totalPages || 1;
+        }
+
+        renderTarjetas(personajesActuales);
+        actualizarPaginacion();
+        poblarFiltroRazas(personajesActuales);
+      } catch (error) {
+        console.error('Error al cargar personajes:', error);
+        mostrarError();
+      }
+    }
+
+    function mostrarCargando() {
+      estadoEl.textContent = 'Cargando personajes...';
+      grid.innerHTML = '';
+      paginacionEl.style.display = 'none';
+    }
+
+    function mostrarError() {
+      estadoEl.textContent = 'No se pudieron cargar los personajes. Intentá de nuevo más tarde.';
+      grid.innerHTML = '';
+    }
+
+    /**
+     * tarjetas de personajes 
+     */
+    function renderTarjetas(personajes) {
+      estadoEl.textContent = '';
+
+      if (!personajes.length) {
+        estadoEl.textContent = 'No se encontraron personajes con esos filtros.';
+        grid.innerHTML = '';
+        return;
+      }
+
+      grid.innerHTML = personajes.map(p => `
+        <div class="tarjeta" data-nombre="${p.name.toLowerCase()}" data-id="${p.id}">
+          <div class="imagen-wrap">
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="info">
+            <h3>${p.name}</h3>
+            <div class="dato"><strong>Raza:</strong> ${p.race || 'Desconocida'}</div>
+            <div class="dato"><strong>Afiliación:</strong> ${p.affiliation || 'Desconocida'}</div>
+            <div class="ki-bar-wrap">
+              <div class="dato" style="margin-bottom:4px;"><strong>Ki:</strong> ${p.ki || '0'}</div>
+              <div class="ki-bar-track">
+                <div class="ki-bar-fill" style="width: ${calcularPorcentajeKi(p)}%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /** con ayuda de ia
+     * Convierte el ki aprox en una estimación
+     * simple, no un valor oficial de balance del juego
+     */
+    function calcularPorcentajeKi(personaje) {
+      const valor = parseFloat((personaje.ki || '0').toString().replace(/[^0-9.]/g, ''));
+      if (!valor || isNaN(valor)) return 5;
+      //
+      const porcentaje = Math.min(100, Math.log10(valor + 1) * 12);
+      return porcentaje;
+    }
+
+    /**
+     * Trae TODOS los personajes
+     * de razas del selector. Se ejecuta una unica vez al iniciar,
+     
+     */
+    async function poblarTodasLasRazas() {
+      try {
+        const res = await fetch(`${API_BASE}?limit=100`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const personajes = Array.isArray(data) ? data : (data.items || []);
+        poblarFiltroRazas(personajes);
+      } catch (error) {
+        console.error('No se pudo precargar la lista de razas:', error);
+      }
+    }
+
+    /**
+     * Llena el select de razas con las razas encontradas en los personajes
+     * ya cargados, sin duplicar 
+     */
+    function poblarFiltroRazas(personajes) {
+      const razaSeleccionada = selectRaza.value;
+      const razasExistentes = new Set(
+        Array.from(selectRaza.options).map(o => o.value)
+      );
+
+      personajes.forEach(p => {
+        if (p.race && !razasExistentes.has(p.race)) {
+          const opt = document.createElement('option');
+          opt.value = p.race;
+          opt.textContent = p.race;
+          selectRaza.appendChild(opt);
+          razasExistentes.add(p.race);
+        }
+      });
+
+      selectRaza.value = razaSeleccionada; // mantener seleccon del usuario
+    }
+
+    function actualizarPaginacion() {
+      // La API no pagina los resultados filtrados por raza: si hay un filtro
+      // activo, se muestran todos los resultados de una vez sin controles 
+      if (selectRaza.value) {
+        paginacionEl.style.display = 'none';
+        return;
+      }
+      paginacionEl.style.display = 'flex';
+      infoPaginaEl.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+      btnAnterior.disabled = paginaActual <= 1;
+      btnSiguiente.disabled = paginaActual >= totalPaginas;
+    }
+
+    /**
+     * Filtra las tarjetas ya renderizadas por nombre, sin volver a pedir
+     * datos a la API (filtrado del lado del cliente sobre la pagactual).
+     */
+    function filtrarPorNombre() {
+      const texto = inputBuscar.value.trim().toLowerCase();
+      document.querySelectorAll('.tarjeta').forEach(tarjeta => {
+        const coincide = tarjeta.dataset.nombre.includes(texto);
+        tarjeta.style.display = coincide ? '' : 'none';
+      });
+    }
+
+    // ===========================
+    // MODAL DE DETALLE
+    // ===========================
+
+    /**
+     * Abre el modal y trae el detalle completo del personaje por id
+     * Usa cache para evitar pedidos repetidos a la API
+     */
+    async function abrirDetalle(id) {
+      modalOverlay.classList.add('activo');
+      modalContenido.innerHTML = '<div class="modal-cargando">Cargando detalle...</div>';
+
+      try {
+        let personaje = cacheDetalle.get(id);
+
+        if (!personaje) {
+          const res = await fetch(`${API_BASE}/${id}`);
+          if (!res.ok) throw new Error(`La API respondió con estado ${res.status}`);
+          personaje = await res.json();
+          cacheDetalle.set(id, personaje);
+        }
+
+        renderModal(personaje);
+      } catch (error) {
+        console.error('Error al cargar el detalle:', error);
+        modalContenido.innerHTML = '<div class="modal-cargando">No se pudo cargar el detalle. Intentá de nuevo.</div>';
+      }
+    }
+
+    /**
+     * Crea el contenido del modal con los datos completos del personaje:
+     
+     */
+    function renderModal(p) {
+      const transformaciones = Array.isArray(p.transformations) ? p.transformations : [];
+
+      const bloqueTransformaciones = transformaciones.length ? `
+        <div>
+          <div class="modal-seccion-titulo">Transformaciones</div>
+          <div class="modal-transformaciones">
+            ${transformaciones.map(t => `
+              <div class="transformacion">
+                <div class="miniatura">
+                  <img src="${t.image}" alt="${t.name}" loading="lazy">
+                </div>
+                <span>${t.name}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      modalContenido.innerHTML = `
+        <div class="modal-hero">
+          <img src="${p.image}" alt="${p.name}">
+        </div>
+        <div class="modal-identidad">
+          <h2>${p.name}</h2>
+          <div class="modal-badges">
+            <span class="badge acento">${p.race || 'Raza desconocida'}</span>
+            <span class="badge">${p.affiliation || 'Afiliación desconocida'}</span>
+          </div>
+        </div>
+        <div class="modal-cuerpo">
+          <div class="modal-datos">
+            <div class="dato-item">
+              <span class="valor">${p.gender || '—'}</span>
+              <span class="etiqueta">Género</span>
+            </div>
+            <div class="dato-item">
+              <span class="valor">${p.ki || '—'}</span>
+              <span class="etiqueta">Ki</span>
+            </div>
+            <div class="dato-item">
+              <span class="valor">${p.maxKi || '—'}</span>
+              <span class="etiqueta">Ki máximo</span>
+            </div>
+            <div class="dato-item">
+              <span class="valor">${p.originPlanet?.name || '—'}</span>
+              <span class="etiqueta">Planeta</span>
+            </div>
+          </div>
+          ${p.description ? `
+            <div>
+              <div class="modal-seccion-titulo">Descripción</div>
+              <p class="modal-descripcion">${p.description}</p>
+            </div>
+          ` : ''}
+          ${bloqueTransformaciones}
+        </div>
+      `;
+    }
+
+    function cerrarModal() {
+      modalOverlay.classList.remove('activo');
+    }
+
+    // eventos > clicks en el grid y detecta la tarjeta clickeada
+    grid.addEventListener('click', (evento) => {
+      const tarjeta = evento.target.closest('.tarjeta');
+      if (tarjeta) abrirDetalle(tarjeta.dataset.id);
+    });
+
+    modalCerrar.addEventListener('click', cerrarModal);
+
+    // Cerrar al hacer clic fuera del modal (en el overlay)
+    modalOverlay.addEventListener('click', (evento) => {
+      if (evento.target === modalOverlay) cerrarModal();
+    });
+
+    // Cerrar con la tecla Escape
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape') cerrarModal();
+    });
+
+    // ===========================
+    // EVENTOS
+    // ===========================
+    btnAnterior.addEventListener('click', () => {
+      if (paginaActual > 1) cargarPersonajes(paginaActual - 1);
+    });
+
+    btnSiguiente.addEventListener('click', () => {
+      if (paginaActual < totalPaginas) cargarPersonajes(paginaActual + 1);
+    });
+
+    selectRaza.addEventListener('change', () => cargarPersonajes(1));
+    inputBuscar.addEventListener('input', filtrarPorNombre);
+
+    // Carga inio de pagina
+    cargarPersonajes(1);
+    poblarTodasLasRazas();
+  </script>
+
+</body>
+</html>

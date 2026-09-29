@@ -1,0 +1,445 @@
+/* ===========================
+   tokens
+   Paleta de colores / feedback profe 
+=========================== */
+:root {
+  --bg: #0d0d12;
+  --surface: #16161f;
+  --surface-hover: #1d1d29;
+  --border: #2a2a38;
+  --ki-orange: #ff7a1a;
+  --ki-blue: #3fa9f5;
+  --text: #f4f1ea;
+  --text-muted: #8b8b96;
+}
+
+/* aplico a todos los elements  */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* fondo oscuro de la pagina,  para que tenga tema claro, podria ser mejora ux/ui  */
+body {
+  background: var(--bg); 
+  color: var(--text);
+  font-family: 'Rubik', sans-serif;
+  min-height: 100vh;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+header {
+  padding: 64px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brillos  */
+header::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(255,122,26,0.18) 0%, rgba(255,122,26,0) 70%);
+  pointer-events: none;
+}
+
+header h1 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: 1px;
+  position: relative;
+}
+
+header h1 span {
+  color: var(--ki-orange);
+}
+
+header p {
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-size: 1.05rem;
+  position: relative;
+}
+
+/* ===========================
+   FILTROS
+=========================== */
+.filtros {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filtros input,
+.filtros select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+}
+
+.filtros input { flex: 1; min-width: 220px; }
+
+.filtros input:focus,
+.filtros select:focus {
+  outline: 2px solid var(--ki-orange);
+  outline-offset: 1px;
+}
+
+/* ===========================
+   TARJETAS
+=========================== */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+#estado {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px 0;
+}
+
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* Tarjeta individual para c/u de los personajes
+   cursor: pointer click para abrir modal  */
+.tarjeta {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--ki-orange);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.tarjeta:hover {
+  background: var(--surface-hover);
+  transform: translateY(-2px);
+}
+
+.tarjeta .imagen-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #0a0a0e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarjeta img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+}
+
+.tarjeta .info {
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.tarjeta h3 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 1.15rem;
+  letter-spacing: 0.3px;
+}
+
+.tarjeta .dato {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.tarjeta .dato strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.ki-bar-wrap {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+/* separa el ki de la barra*/
+.ki-label {
+  margin-bottom: 4px;
+}
+
+.ki-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #0a0a0e;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* dif cajas con relleno */
+.ki-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ki-blue), var(--ki-orange));
+}
+
+/* ===========================
+   PAGINADO
+=========================== */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.paginacion button {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Rubik', sans-serif;
+}
+
+.paginacion button:hover:not(:disabled) {
+  border-color: var(--ki-orange);
+  color: var(--ki-orange);
+}
+
+.paginacion button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.paginacion span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ===========================
+   MODAL DE DETALLE
+=========================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 8, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+
+/* El JS agrega la clase activo para activar el modal */
+.modal-overlay.activo {
+  display: flex;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Barra de scroll  */
+.modal::-webkit-scrollbar { width: 8px; }
+.modal::-webkit-scrollbar-track { background: transparent; }
+.modal::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.modal::-webkit-scrollbar-thumb:hover { background: var(--ki-orange); }
+
+.modal-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0,0,0,0.4);
+  border: none;
+  border-radius: 50%;
+  color: var(--text);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-cerrar:hover { background: var(--ki-orange); }
+
+/* Franja superior */
+.modal-hero {
+  position: relative;
+  height: 180px;
+  background: linear-gradient(180deg, #1b1b28 0%, var(--surface) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.modal-hero img {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: bottom;
+}
+
+.modal-identidad {
+  padding: 18px 28px 0;
+  text-align: center;
+}
+
+.modal-identidad h2 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1.7rem;
+}
+
+.modal-badges {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.badge.acento {
+  border-color: var(--ki-orange);
+  color: var(--ki-orange);
+}
+
+.modal-cuerpo {
+  padding: 20px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.modal-datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+}
+
+.modal-datos .dato-item {
+  text-align: center;
+  padding: 10px 8px;
+  background: #0a0a0e;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.modal-datos .dato-item .valor {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+  display: block;
+}
+
+.modal-datos .dato-item .etiqueta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.modal-descripcion {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.modal-seccion-titulo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  color: var(--ki-blue);
+  margin-bottom: 10px;
+}
+
+.modal-transformaciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 10px;
+}
+
+.transformacion { text-align: center; }
+
+.transformacion .miniatura {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #0a0a0e;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.transformacion img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+.transformacion span {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.2;
+}
+
+.modal-cargando {
+  padding: 60px 28px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+
+.oculto {
+  display: none;
+}

@@ -8,6 +8,8 @@ Página que muestra tarjetas individuales de personajes de Dragon Ball Z, consum
 1. Descargá `index.html`.
 2. Abrilo directamente en el navegador (doble clic), o serví la carpeta con Live Server
 
+o sino DEMO: https://dragonball-loadpage.vercel.app/ 
+
 ## ✨ Funcionalidades
 
 - **Listado de personajes** en tarjetas, con imagen, raza, afiliación y una barra visual de ki.

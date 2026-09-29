@@ -1,10 +1,9 @@
 # Dragon Ball Z – Loadpage
 
-Página que muestra tarjetas individuales de personajes de Dragon Ball Z, consumiendo la API pública [dragonball-api.com](https://dragonball-api.com/). No necesita inicio de sesión ni backend propio: es un único archivo HTML con CSS y JavaScript plano.
+Página que muestra tarjetas individuales de personajes de Dragon Ball Z, consumiendo la API pública [dragonball-api.com](https://dragonball-api.com/). No necesita inicio de sesión ni backend propio: son 3 archivos HTML,  CSS y JavaScript plano.
 
 ## 🚀 Cómo ejecutar
 
-No necesita instalación ni dependencias.
 
 1. Descargá `index.html`.
 2. Abrilo directamente en el navegador (doble clic), o serví la carpeta con Live Server
@@ -38,7 +37,10 @@ Base: `https://dragonball-api.com/api/characters`
 ## 📁 Estructura
 
 ```
-index.html   → HTML + CSS + JS en un solo archivo autocontenido
+├── index.html → estructura de la página
+├── style.css → estilos y diseño
+├── script.js → lógica, consumo de la API y eventos
+└── README.md
 ```
 
 ## 🔧 Notas técnicas
